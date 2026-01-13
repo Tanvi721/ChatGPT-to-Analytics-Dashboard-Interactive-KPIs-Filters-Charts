@@ -1,0 +1,179 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Advanced Client Analytics Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+:root{
+--bg:#f4f6f8;--card:#fff;--text:#111827;--accent:#2563eb;
+}
+body.dark{
+--bg:#020617;--card:#0f172a;--text:#e5e7eb;--accent:#38bdf8;
+}
+body{
+margin:0;font-family:Segoe UI;background:var(--bg);color:var(--text);transition:.3s;
+}
+header{
+padding:18px;display:flex;justify-content:space-between;align-items:center;
+}
+button{
+background:var(--accent);color:#fff;border:none;border-radius:20px;
+padding:8px 14px;font-weight:600;cursor:pointer;
+}
+.container{padding:20px;}
+.grid{
+display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;
+}
+.card{
+background:var(--card);border-radius:14px;padding:16px;
+box-shadow:0 6px 18px rgba(0,0,0,.08);
+}
+.controls{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px;}
+input,select{
+padding:10px;border-radius:10px;border:1px solid #ccc;min-width:200px;
+}
+table{
+width:100%;border-collapse:collapse;background:var(--card);
+border-radius:14px;overflow:hidden;margin-top:20px;
+}
+th,td{padding:14px;text-align:left;}
+th{background:var(--accent);color:#fff;}
+tr:nth-child(even){background:rgba(0,0,0,.05);}
+canvas{background:var(--card);border-radius:14px;padding:10px;}
+</style>
+</head>
+
+<body>
+<header>
+<h2>📊 Client Revenue & Headshots Analytics</h2>
+<button onclick="toggleTheme()">Toggle Theme</button>
+</header>
+
+<div class="container">
+
+<div class="grid">
+<div class="card"><h2 id="total">0</h2>Total Clients</div>
+<div class="card"><h2 id="delivered">0</h2>Delivered</div>
+<div class="card"><h2 id="pending">0</h2>Pending</div>
+<div class="card"><h2 id="revenue">₹0</h2>Total Revenue</div>
+</div>
+
+<br>
+
+<div class="controls">
+<input id="search" placeholder="Search client/email">
+<select id="statusFilter">
+<option value="All">All Status</option>
+<option value="Delivered">Delivered</option>
+<option value="In Process">In Process</option>
+<option value="Received">Received</option>
+</select>
+</div>
+
+<div class="grid">
+<canvas id="statusChart"></canvas>
+<canvas id="revenueChart"></canvas>
+<canvas id="headshotChart"></canvas>
+</div>
+
+<table>
+<thead>
+<tr>
+<th>Client</th><th>Headshots</th><th>Price</th><th>Status</th><th>Email</th>
+</tr>
+</thead>
+<tbody id="tableBody"></tbody>
+</table>
+
+</div>
+
+<script>
+const rawData=[
+{client:"Avinash Satav",headshots:1,price:5000,status:"Delivered",email:"avinash.satav@email.com"},
+{client:"Merlin Fernandes",headshots:9000,price:9000,status:"Received",email:"wolfheaddummy@gmail.com"},
+{client:"Dev Thakur",headshots:5,price:12000,status:"In Process",email:"Mockemail3@gmail.com"},
+{client:"Ankit Goswami",headshots:8,price:7999,status:"Delivered",email:"Mockemail4@gmail.com"},
+{client:"Vaibhavi Jadhav",headshots:1,price:1350,status:"Delivered",email:"Mockemail5@gmail.com"}
+];
+
+let charts=[];
+const tableBody=document.getElementById("tableBody");
+const search=document.getElementById("search");
+const statusFilter=document.getElementById("statusFilter");
+
+function filteredData(){
+return rawData.filter(d=>
+(d.client.toLowerCase().includes(search.value.toLowerCase())
+||d.email.toLowerCase().includes(search.value.toLowerCase()))
+&&(statusFilter.value==="All"||d.status===statusFilter.value)
+);
+}
+
+function renderStats(data){
+document.getElementById("total").innerText=data.length;
+document.getElementById("delivered").innerText=data.filter(d=>d.status==="Delivered").length;
+document.getElementById("pending").innerText=data.filter(d=>d.status!=="Delivered").length;
+document.getElementById("revenue").innerText="₹"+data.reduce((s,d)=>s+d.price,0);
+}
+
+function renderTable(data){
+tableBody.innerHTML="";
+data.forEach(d=>{
+tableBody.innerHTML+=`
+<tr>
+<td>${d.client}</td>
+<td>${d.headshots}</td>
+<td>₹${d.price}</td>
+<td>${d.status}</td>
+<td>${d.email}</td>
+</tr>`;
+});
+}
+
+function destroyCharts(){charts.forEach(c=>c.destroy());charts=[];}
+
+function renderCharts(data){
+destroyCharts();
+
+const statusCount={};
+data.forEach(d=>statusCount[d.status]=(statusCount[d.status]||0)+1);
+
+charts.push(new Chart(statusChart,{
+type:"doughnut",
+data:{labels:Object.keys(statusCount),datasets:[{data:Object.values(statusCount)}]}
+}));
+
+charts.push(new Chart(revenueChart,{
+type:"bar",
+data:{labels:data.map(d=>d.client),
+datasets:[{label:"Revenue ₹",data:data.map(d=>d.price)}]}
+}));
+
+charts.push(new Chart(headshotChart,{
+type:"line",
+data:{labels:data.map(d=>d.client),
+datasets:[{label:"Headshots",data:data.map(d=>d.headshots),fill:true}]}
+}));
+}
+
+function updateUI(){
+const data=filteredData();
+renderStats(data);
+renderTable(data);
+renderCharts(data);
+}
+
+function toggleTheme(){document.body.classList.toggle("dark");}
+
+search.addEventListener("input",updateUI);
+statusFilter.addEventListener("change",updateUI);
+
+updateUI();
+</script>
+
+</body>
+</html>
