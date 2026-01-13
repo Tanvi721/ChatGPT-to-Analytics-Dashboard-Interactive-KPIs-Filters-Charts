@@ -70,9 +70,12 @@ This project demonstrates how **raw data** can be converted into a **professiona
 
 ## 📂 Project Structure
 📁 ChatGPT-to-Analytics-Dashboard
+
 │
-├── index.html        # Main dashboard (UI + logic + charts)
-└── README.md         # Project documentation
+
+├──  index.html       # Main dashboard (UI + logic + charts)
+
+└──  README.md         # Project documentation
 
 
 ---
@@ -97,41 +100,31 @@ This project demonstrates how **raw data** can be converted into a **professiona
 
 ---
 
-## 📸 Screenshots
+## 📸 Output
 
 > _Sample screenshots of the dashboard UI._
 
 ### 🖥️ Dashboard Overview
-![Dashboard Overview](screenshots/dashboard-overview.png)
+<img width="1920" height="1080" alt="Screenshot (18)" src="https://github.com/user-attachments/assets/e51bbdb3-0528-4406-8f76-65283c10afcf" />
+
 
 ### 📊 Charts Visualization
-![Charts](screenshots/charts-view.png)
+<img width="1920" height="1080" alt="Screenshot (19)" src="https://github.com/user-attachments/assets/4f64a65e-6eb2-4dff-8657-7ec6ec700031" />
+
 
 ### 🎛 Filters in Action
-![Filters](screenshots/filters.png)
+<img width="1920" height="1080" alt="Screenshot (22)" src="https://github.com/user-attachments/assets/dcaeb11a-d47f-47fb-9dec-cf1224155d9c" />
+
+<img width="1920" height="1080" alt="Screenshot (20)" src="https://github.com/user-attachments/assets/7927f02a-5ad5-4fb3-9192-d67e27a7aaee" />
+
 
 ### 🌙 Dark Mode Theme
-![Dark Mode](screenshots/dark-mode.png)
+<img width="1920" height="1080" alt="Screenshot (21)" src="https://github.com/user-attachments/assets/1071c0bf-f35a-444c-a95b-c756fbce8488" />
+
 
 ---
 
-## 🎥 GIF Demos
 
-> _Quick demos showcasing real-time interactivity._
-
-### 🔍 Search & Filters
-![Search & Filters Demo](gifs/search-filters.gif)
-
-### 📊 KPI & Charts Update
-![KPI Charts Demo](gifs/kpi-charts.gif)
-
-### 🌗 Theme Toggle
-![Theme Toggle Demo](gifs/theme-toggle.gif)
-
-### 📈 Chart Interaction
-![Charts Interaction Demo](gifs/charts-interaction.gif)
-
----
 
 ## 🧪 How to Run the Project
 
